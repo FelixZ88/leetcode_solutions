@@ -8,42 +8,22 @@ public class Code_22 {
         List l = c.generateParenthesis(4);
         System.out.println();
     }
+
     public List<String> generateParenthesis(int n) {
-        if (n == 0) {
-            return null;
-        }
-        if (n == 1) {
-            List<String> p = new ArrayList<>();
-            p.add("()");
-            return p;
+        List<String> ans = new ArrayList();
+        backtrack(ans, "", 0, 0, n);
+        return ans;
+    }
+
+    public void backtrack(List<String> ans, String cur, int open, int close, int max){
+        if (cur.length() == max * 2) {
+            ans.add(cur);
+            return;
         }
 
-        List<String> parenthesis = generateParenthesis(n - 1);
-        List<String> ret = new ArrayList<>();
-        HashMap filter = new HashMap();
-        for (String p : parenthesis) {
-            String first = "()" + p;
-            if (!filter.containsKey(first)) {
-                ret.add(first);
-                filter.put(first, first);
-            }
-            for (int i = 1; i < p.length(); i ++) {
-                StringBuffer sb = new StringBuffer();
-                sb.append(p.substring(0, i));
-                sb.append("()");
-                sb.append(p.substring(i, p.length()));
-                String new_p = sb.toString();
-                if (!filter.containsKey(new_p)) {
-                    filter.put(new_p, new_p);
-                    ret.add(new_p);
-                }
-            }
-            String last = p + "()";
-            if (!filter.containsKey(last)) {
-                ret.add(last);
-                filter.put(last, last);
-            }
-        }
-        return ret;
+        if (open < max)
+            backtrack(ans, cur+"(", open+1, close, max);
+        if (close < open)
+            backtrack(ans, cur+")", open, close+1, max);
     }
 }
