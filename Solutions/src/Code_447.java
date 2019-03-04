@@ -9,23 +9,36 @@ public class Code_447 {
     }
 
     public int numberOfBoomerangs(int[][] points) {
+        int length = points.length;
         int total = 0;
-        HashMap<Integer, Integer> distances = new HashMap<Integer, Integer>();
-        for (int i = 0; i < points.length; i ++) {
-            for (int j = i + 1; j < points.length; j ++) {
+        int[][] distances = new int[length][length];
+
+        for (int i = 0; i < length; i ++) {
+            for (int j = i + 1; j < length; j ++) {
                 int[] pointi = points[i];
                 int[] pointj = points[j];
-                int distance = (pointj[1] - pointi[1]) * (pointj[1] - pointi[1]) + (pointj[0] - pointi[0]) * (pointj[0] - pointi[0]);
-                if (distances.containsKey(distance)) {
-                    distances.put(distance, distances.get(distance) + 1);
-                } else {
-                    distances.put(distance, 1);
-                }
+                distances[i][j] = (pointj[1] - pointi[1]) * (pointj[1] - pointi[1]) + (pointj[0] - pointi[0]) * (pointj[0] - pointi[0]);
+                distances[j][i] = distances[i][j];
             }
         }
 
-        for (Map.Entry<Integer, Integer> entry : distances.entrySet()) {
-            total += entry.getValue() * (entry.getValue() - 1);
+        for (int i = 0; i < length; i ++) {
+            HashMap<Integer, Integer> dMap = new HashMap<>();
+            for (int j = 0; j < length; j ++) {
+                int d = distances[i][j];
+                if (dMap.containsKey(d)) {
+                    dMap.put(d, dMap.get(d) + 1);
+                } else {
+                    dMap.put(d, 1);
+                }
+            }
+
+            for (Map.Entry<Integer, Integer> entry : dMap.entrySet()) {
+                int count = entry.getValue();
+                if (count >= 2) {
+                    total += count * (count - 1);
+                }
+            }
         }
         return total;
     }
