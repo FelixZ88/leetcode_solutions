@@ -1,23 +1,22 @@
 
 public class Code_437 {
 
-    public static void main(String[] args) {
-        Code_437 c = new Code_437();
 
-        int[] nums = {1, Integer.MIN_VALUE, 2, Integer.MIN_VALUE, 3, Integer.MIN_VALUE, 4, Integer.MIN_VALUE, 5};
-        Utils.TreeNode head = Utils.buildTree(nums);
-
-        System.out.println(c.pathSum(head, 3));
+    public static class TreeNode {
+        int val;
+        TreeNode left;
+        TreeNode right;
+        TreeNode(int x) { val = x; }
     }
 
-    public int pathSum(Utils.TreeNode root, int sum) {
+    public int pathSum(TreeNode root, int sum) {
         if (root != null) {
             return pathSum(root.left, sum) + pathSum(root.right, sum) + pathSubSum(root, sum);
         }
         return 0;
     }
 
-    public int pathSubSum(Utils.TreeNode root, int remain) {
+    public int pathSubSum(TreeNode root, int remain) {
 
         if (root == null) {
             return 0;
