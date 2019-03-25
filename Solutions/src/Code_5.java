@@ -1,11 +1,49 @@
+import java.util.Arrays;
+
 public class Code_5 {
     public static void main(String[] args) {
         Code_5 c = new Code_5();
-        String palindrome = c.longestPalindrome("abcdcb");
+        String palindrome = c.longestPalindrome("babad");
         System.out.println(palindrome);
     }
 
+    /** Manacher's Algorithm*/
     public String longestPalindrome(String s) {
+        StringBuffer sb = new StringBuffer(s.length() * 2 + 3);
+        sb.append("^");
+        for (char c : s.toCharArray()) {
+            sb.append("#");
+            sb.append(c);
+        }
+        sb.append("#$");
+
+        int[] p = new int[sb.length()];
+        Arrays.fill(p, 1);
+
+        int mx = 0, id = 0;
+        int maxId = 0;
+        for (int i = 1; i < sb.length() - 1; i ++) {
+            if (i < mx) {
+                p[i] = Math.min(p[id * 2 - i], mx - i);
+            }
+
+            while (sb.charAt(i - p[i]) == sb.charAt(i + p[i])) {
+                p[i] ++;
+            }
+
+            if (mx < i + p[i]) {
+                id = i;
+                mx = i + p[i];
+            }
+            if (p[i] > p[maxId]) {
+                maxId = i;
+            }
+        }
+
+        return s.substring((maxId - p[maxId]) / 2, (maxId - p[maxId]) / 2 + p[maxId] - 1);
+    }
+
+    public String longestPalindrome2(String s) {
         char[] words = s.toCharArray();
 
         int start = 0, end = 0;
@@ -37,4 +75,5 @@ public class Code_5 {
         }
         return len;
     }
+
 }
